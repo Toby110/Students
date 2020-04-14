@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
+    <link rel="icon" href="{{static_url('my.ico')}}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <!-- Optional JavaScript -->
@@ -68,25 +69,29 @@
     </div>
 </div>
     <script>
-        var data = [] 
-        {%for i in data %}
-        var row = {}
-        row['id'] = '{{i[0]}}'
-        row['name'] = '{{i[1]}}'
-        row['grade'] = '{{i[2]}}'
-        row['age'] = '{{i[3]}}'
-        data.push(row) 
-        {%end%}
         var vm = new Vue({
             el: '#app',
             data: {
-                list: data,
+                list:[],
                 name:'',
                 grade:'',
                 age:'',
                 keywords:'',
             },
+            created() {
+               this.get_data()
+            },
             methods: {
+                get_data:function(){
+                    {%for i in data %}
+                    var row = {}
+                    row['id'] = '{{i[0]}}'
+                    row['name'] = '{{i[1]}}'
+                    row['grade'] = '{{i[2]}}'
+                    row['age'] = '{{i[3]}}'
+                    this.list.push(row) 
+                    {%end%}
+                },
                 add:function(){
                 data={id:this.list.length+1,name:this.name,grade:this.grade,age:this.age}
                 this.$http.post('http://127.0.0.1:8888',data,{emulateJSON:true}).then(result=>{
